@@ -5,6 +5,7 @@ from datetime import datetime
 from collections import Counter
 
 DATA_FILE_PATH = '2022_place_canvas_history.csv'
+RPLACE_WIDTH = 2000
 
 def analyze_rplace(start_str, end_str, file_path=DATA_FILE_PATH):
     # Parse input times into datetime objects
@@ -24,7 +25,9 @@ def analyze_rplace(start_str, end_str, file_path=DATA_FILE_PATH):
     color_counts = Counter()
     pixel_counts = Counter()
     rows_matched = 0
-    total_rows_processed = 0 
+    # separating total row counter into two variables to avoid using modulu
+    intermediate_row_count = 0
+    five_million_count = 0 
     # Track progress through the massive file so I know it's not frozen
 
     try:
@@ -35,13 +38,16 @@ def analyze_rplace(start_str, end_str, file_path=DATA_FILE_PATH):
             print(f"Starting full scan of {file_path}...")
             
             for row in reader:
-                total_rows_processed += 1
+                intermediate_row_count += 1
                 
                 # Progress bar: Prints every 5 million rows so you know it's not frozen
-                if total_rows_processed % 5000000 == 0:
-                    print(f"Progress: {total_rows_processed // 1000000}M rows scanned...")
+                if intermediate_row_count == 5000000 :
+                    intermediate_row_count = 0
+                    five_million_count += 1
+                    print(f"Progress: { five_million_count * 5}M rows scanned...")
 
                 try:
+                    # slice the timestamp before passing to strptime
                     ts_hour_part = row['timestamp'][:13]
                     row_time = datetime.strptime(ts_hour_part, "%Y-%m-%d %H")
 
@@ -67,7 +73,7 @@ def analyze_rplace(start_str, end_str, file_path=DATA_FILE_PATH):
     print(f"\n--- Final Results ---")
     print(f"Timeframe: {start_str} to {end_str}")
     print(f"Execution Time: {execution_time_ms} ms")
-    print(f"Total Rows Scanned: {total_rows_processed}")
+    print(f"Total Rows Scanned: {five_million_count * 5000000 + intermediate_row_count}")
     print(f"Rows Matched: {rows_matched}")
     
     if rows_matched > 0:
@@ -75,9 +81,9 @@ def analyze_rplace(start_str, end_str, file_path=DATA_FILE_PATH):
         clean_index = int(most_pixel_raw.replace(',', ''))
         
         # Convert to (X, Y) assuming 2000px canvas width
-        width = 2000
-        x = clean_index % width
-        y = clean_index // width
+        
+        x = clean_index % RPLACE_WIDTH
+        y = clean_index // RPLACE_WIDTH
         
         formatted_pixel = f"({x}, {y})"
         
