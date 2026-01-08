@@ -5,6 +5,7 @@ from datetime import datetime
 from collections import Counter
 
 DATA_FILE_PATH = '2022_place_canvas_history.csv'
+# DATA_FILE_PATH = 'testplacedata.csv'
 RPLACE_WIDTH = 2000
 
 def analyze_rplace(start_str, end_str, file_path=DATA_FILE_PATH):
@@ -26,8 +27,8 @@ def analyze_rplace(start_str, end_str, file_path=DATA_FILE_PATH):
     pixel_counts = Counter()
     rows_matched = 0
     # separating total row counter into two variables to avoid using modulu
-    intermediate_row_count = 0
-    five_million_count = 0 
+    # intermediate_row_count = 0
+    # five_million_count = 0 
     # Track progress through the massive file so I know it's not frozen
 
     try:
@@ -38,13 +39,13 @@ def analyze_rplace(start_str, end_str, file_path=DATA_FILE_PATH):
             print(f"Starting full scan of {file_path}...")
             
             for row in reader:
-                intermediate_row_count += 1
+                # intermediate_row_count += 1
                 
                 # Progress bar: Prints every 5 million rows so you know it's not frozen
-                if intermediate_row_count == 5000000 :
-                    intermediate_row_count = 0
-                    five_million_count += 1
-                    print(f"Progress: { five_million_count * 5}M rows scanned...")
+                # if intermediate_row_count == 5000000 :
+                #     intermediate_row_count = 0
+                #     five_million_count += 1
+                #     print(f"Progress: { five_million_count * 5}M rows scanned...")
 
                 try:
                     # slice the timestamp before passing to strptime
@@ -73,7 +74,7 @@ def analyze_rplace(start_str, end_str, file_path=DATA_FILE_PATH):
     print(f"\n--- Final Results ---")
     print(f"Timeframe: {start_str} to {end_str}")
     print(f"Execution Time: {execution_time_ms} ms")
-    print(f"Total Rows Scanned: {five_million_count * 5000000 + intermediate_row_count}")
+    # print(f"Total Rows Scanned: {five_million_count * 5000000 + intermediate_row_count}")
     print(f"Rows Matched: {rows_matched}")
     
     if rows_matched > 0:
