@@ -20,5 +20,5 @@
 - **Execution Time:** 595897 ms
 - **Most Placed Color:** #FFFFFF
 - **Most Placed Pixel Location:** (0, 0)
-- **Top 3 Colors:**[('#FFFFFF', 2800706), ('#000000', 2767463), ('#FF4500', 1133449)]
+- **Top 3 Colors:** [('#FFFFFF', 2800706), ('#000000', 2767463), ('#FF4500', 1133449)]
 - **Top 3 Raw Indices:** [('0,0', 6396), ('1999,1999', 5299), ('359,564', 4148)]
